@@ -1,0 +1,60 @@
+package org.example.demo13;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class BoardGameStorage {
+    private List<BoardGame> boardGames = new ArrayList<>();
+
+    public void addNewGame(BoardGame boardGame){
+        boardGames.add(boardGame);
+    }
+    public List<BoardGame> getAllBoardGames(){
+        return boardGames;
+    }
+
+
+    public Map<String, List<BoardGame>> groupGamesByGenre(){
+        return boardGames.stream().collect(Collectors.groupingBy(BoardGame::getGenre));
+    }
+    public Map<String, List<BoardGame>> groupGamesByPublisher(){
+        return boardGames.stream().collect(Collectors.groupingBy(BoardGame::getPublisher));
+    }
+    public Set<String> getAllGenres(){
+        return boardGames.stream().map(boardGame -> boardGame.getGenre()).collect(Collectors.toSet());
+    }
+    public Set<String> getAllPublishers(){
+        return boardGames.stream().map(boardGame -> boardGame.getPublisher()).collect(Collectors.toSet());
+    }
+    public Set<String> getAllTitles(){
+        return boardGames.stream().map(boardGame -> boardGame.getTitle()).collect(Collectors.toSet());
+    }
+    public List<BoardGame> filterGamesByGenre(String genre) {
+        return boardGames.stream()
+                .filter(game -> game.getGenre().toLowerCase().contains(genre.toLowerCase()))
+                .toList();
+    }
+    public List<BoardGame> filterGamesByTitle(String title) {
+        return boardGames.stream()
+                .filter(game -> game.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .toList();
+    }
+    public List<BoardGame> filterGamesByPublisher(String publisher) {
+        return boardGames.stream()
+                .filter(game -> game.getPublisher().toLowerCase().contains(publisher.toLowerCase()))
+                .toList();
+    }
+    public List<BoardGame> filterGamesByTitleAndPublisher(String search){
+        return boardGames.stream().filter(boardGame -> boardGame.getPublisher().contains(search) || boardGame.getTitle().contains(search)).toList();
+    }
+    public List<BoardGame> addSortedGameByHighPrice(){
+        return boardGames.stream().sorted(Comparator.comparing(BoardGame::getPrice)).toList();
+    }
+    public List<BoardGame> addSortedGameBoardLowPrice(){
+        return boardGames.stream().sorted(Comparator.comparing(BoardGame::getPrice).reversed()).toList();
+    }
+    public List<BoardGame> minToMax(int min, int max){
+        return boardGames.stream().filter(boardGame -> boardGame.getPrice() > min && boardGame.getPrice() < max).toList();
+    }
+
+}
